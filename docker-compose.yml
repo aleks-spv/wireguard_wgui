@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+  wireguard:
+    build: .
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - SENDGRID_API_KEY
+      - EMAIL_FROM_ADDRESS
+      - EMAIL_FROM_NAME
+      - SESSION_SECRET
+      - WGUI_USERNAME=odmin
+      - WGUI_PASSWORD=OpasswordO
+      - WG_CONF_TEMPLATE
+      - WGUI_MANAGE_START=false
+      - WGUI_MANAGE_RESTART=false
+      - PUID=1000
+      - PGID=1000
+      - TZ=ASIA/Bishkek
+      - SERVERURL=192.168.1.1
+      - SERVERPORT=51820 #optional
+      - PEERS=20 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=12.12.12.0 #optional
+      - ALLOWEDIPS=0.0.0.0/0 #optional
+      - LOG_CONFS=true #optional
+    ports:
+#      - 51820:51820/udp
+      - 5000:5000
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - ./db:/app/db
+      - ./config:/config
