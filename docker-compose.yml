@@ -1,9 +1,9 @@
 version: '3.5'
 
 services:
-  wireguard:
+  wireguardwgui:
     build: .
-    container_name: wireguard
+    container_name: wireguardwgui
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -15,18 +15,12 @@ services:
       - WGUI_USERNAME=odmin
       - WGUI_PASSWORD=OpasswordO
       - WG_CONF_TEMPLATE
-      - WGUI_MANAGE_START=false
-      - WGUI_MANAGE_RESTART=false
+      - WGUI_MANAGE_START=true
+      - WGUI_MANAGE_RESTART=true
       - PUID=1000
       - PGID=1000
-      - TZ=ASIA/Bishkek
-      - SERVERURL=192.168.1.1
-      - SERVERPORT=51820 #optional
-      - PEERS=20 #optional
-      - PEERDNS=auto #optional
-      - INTERNAL_SUBNET=12.12.12.0 #optional
-      - ALLOWEDIPS=0.0.0.0/0 #optional
-      - LOG_CONFS=true #optional
+      - WGUI_PERSISTENT_KEEPALIVE=25
+      - WGUI_CONFIG_FILE_PATH=/config/wg0.conf
     ports:
 #      - 51820:51820/udp
       - 5000:5000

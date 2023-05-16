@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # extract wg config file path, or use default
-conf="$(jq -r .config_file_path db/server/global_settings.json || echo /etc/wireguard/wg0.conf)"
+conf="$(jq -r .config_file_path db/server/global_settings.json || echo $WGUI_CONFIG_FILE_PATH)"
 
 # manage wireguard stop/start with the container
 case $WGUI_MANAGE_START in (1|t|T|true|True|TRUE)
