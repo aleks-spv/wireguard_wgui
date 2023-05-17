@@ -1,9 +1,9 @@
 version: '3.5'
 
 services:
-  wireguardwgui:
+  wireguard:
     build: .
-    container_name: wireguardwgui
+    container_name: wireguard
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -17,15 +17,29 @@ services:
       - WG_CONF_TEMPLATE
       - WGUI_MANAGE_START=true
       - WGUI_MANAGE_RESTART=true
-      - PUID=1000
-      - PGID=1000
       - WGUI_PERSISTENT_KEEPALIVE=25
       - WGUI_CONFIG_FILE_PATH=/config/wg0.conf
     ports:
-#      - 51820:51820/udp
+      - 51820:51820/udp
       - 5000:5000
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     volumes:
       - ./db:/app/db
       - ./config:/config
+#      - /lib/modules:/lib/modules
+      - ./etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - wireguard_default
+      - zabbix_server
+#        ipv4_address: 172.20.0.5
+    restart: unless-stopped
+
+networks:
+  wireguard_default:
+    name: wireguard_default
+    driver: bridge
+  zabbix_server:
+    name: zabbix_server
+    driver: bridge
